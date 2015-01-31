@@ -3,12 +3,29 @@ require "data_mapper" # Load the DataMapper database library
 
 require "./database_setup"
 
-class Message
+class Book
   include DataMapper::Resource
 
   property :id,         Serial
-  property :body,       Text,     required: true
+  property :title,      String,   required: true
   property :created_at, DateTime, required: true
+  
+  has n, :tags, "Tag"
+end
+
+class Tag
+  include DataMapper::Resource
+
+  belongs_to :book,    Book
+  belongs_to :subject, Subject
+end
+
+class Subject
+  include DataMapper::Resource
+  
+  property :title,     String, required: true
+  
+  has n, :tags, "Tag"
 end
 
 DataMapper.finalize()
